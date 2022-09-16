@@ -16,7 +16,7 @@ class BooksAuthor(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_author'
+        db_table = "books_author"
 
 
 class BooksBook(models.Model):
@@ -28,7 +28,7 @@ class BooksBook(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_book'
+        db_table = "books_book"
 
 
 class BooksBookAuthors(models.Model):
@@ -36,9 +36,13 @@ class BooksBookAuthors(models.Model):
     book_id = models.IntegerField()
     author_id = models.IntegerField()
 
+    @property
+    def author(self):
+        return BooksAuthor.objects.get(pk=self.author_id) if self.author_id else None
+
     class Meta:
         managed = False
-        db_table = 'books_book_authors'
+        db_table = "books_book_authors"
 
 
 class BooksBookBookshelves(models.Model):
@@ -48,7 +52,7 @@ class BooksBookBookshelves(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_book_bookshelves'
+        db_table = "books_book_bookshelves"
 
 
 class BooksBookLanguages(models.Model):
@@ -56,9 +60,15 @@ class BooksBookLanguages(models.Model):
     book_id = models.IntegerField()
     language_id = models.IntegerField()
 
+    @property
+    def language(self):
+        return (
+            BooksLanguage.objects.get(pk=self.language_id) if self.language_id else None
+        )
+
     class Meta:
         managed = False
-        db_table = 'books_book_languages'
+        db_table = "books_book_languages"
 
 
 class BooksBookSubjects(models.Model):
@@ -68,7 +78,7 @@ class BooksBookSubjects(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_book_subjects'
+        db_table = "books_book_subjects"
 
 
 class BooksBookshelf(models.Model):
@@ -77,7 +87,7 @@ class BooksBookshelf(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_bookshelf'
+        db_table = "books_bookshelf"
 
 
 class BooksFormat(models.Model):
@@ -88,7 +98,7 @@ class BooksFormat(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_format'
+        db_table = "books_format"
 
 
 class BooksLanguage(models.Model):
@@ -97,7 +107,7 @@ class BooksLanguage(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_language'
+        db_table = "books_language"
 
 
 class BooksSubject(models.Model):
@@ -106,4 +116,4 @@ class BooksSubject(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'books_subject'
+        db_table = "books_subject"
