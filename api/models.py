@@ -29,12 +29,15 @@ class BooksBook(models.Model):
     class Meta:
         managed = False
         db_table = "books_book"
-        ordering=["-download_count"]
+        ordering = ["-download_count"]
 
 
 class BooksBookAuthors(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.IntegerField()
+    book_id = models.ForeignKey(BooksBook,
+                                db_column="book_id",
+                                on_delete=models.PROTECT,
+                                related_name="author")
     author_id = models.IntegerField()
 
     @property
@@ -49,7 +52,10 @@ class BooksBookAuthors(models.Model):
 
 class BooksBookBookshelves(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.IntegerField()
+    book_id = models.ForeignKey(BooksBook,
+                                db_column="book_id",
+                                on_delete=models.PROTECT,
+                                related_name="shelf")
     bookshelf_id = models.IntegerField()
 
     @property
@@ -64,7 +70,10 @@ class BooksBookBookshelves(models.Model):
 
 class BooksBookLanguages(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.IntegerField()
+    book_id = models.ForeignKey(BooksBook,
+                                db_column="book_id",
+                                on_delete=models.PROTECT,
+                                related_name="language")
     language_id = models.IntegerField()
 
     @property
@@ -79,7 +88,10 @@ class BooksBookLanguages(models.Model):
 
 class BooksBookSubjects(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.IntegerField()
+    book_id = models.ForeignKey(BooksBook,
+                                db_column="book_id",
+                                on_delete=models.PROTECT,
+                                related_name="subject")
     subject_id = models.IntegerField()
 
     @property
@@ -105,7 +117,10 @@ class BooksFormat(models.Model):
     id = models.IntegerField(primary_key=True)
     mime_type = models.CharField(max_length=32)
     url = models.TextField()
-    book_id = models.IntegerField()
+    book_id = models.ForeignKey(BooksBook,
+                                db_column="book_id",
+                                on_delete=models.PROTECT,
+                                related_name="format")
 
     class Meta:
         managed = False

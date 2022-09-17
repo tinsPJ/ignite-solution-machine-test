@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from .models import (BooksBook, BooksBookAuthors, BooksAuthor,
-                     BooksBookLanguages, BooksLanguage, BooksSubject,
-                     BooksBookSubjects, BooksBookBookshelves, BooksBookshelf,
-                     BooksFormat)
+from .models import (BooksBook, BooksAuthor, BooksLanguage, BooksSubject,
+                     BooksBookshelf, BooksFormat)
 from typing import ClassVar
 
 
@@ -38,7 +36,7 @@ class BooksFormatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BooksFormat
-        fields = "__all__"
+        exclude = ("id", "book_id")
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -47,32 +45,27 @@ class BookSerializer(serializers.ModelSerializer):
         model = BooksBook
         fields = ("title", "media_type", "download_count")
 
-    def get_related_instance(self, model: object, instance: object) -> object:
-        return model.objects.filter(book_id=instance.id)
-
     def to_representation(self, instance):
         res = super().to_representation(instance)
+
         # appending author details
-        authors = self.get_related_instance(BooksBookAuthors, instance)
-        author_objects = [author.author for author in authors]
-        res["authors"] = BookAuthorSerializer(author_objects, many=True).data
+        authors = [author.author for author in instance.author.all()]
+        res["authors"] = BookAuthorSerializer(authors, many=True).data
 
         # Appending language
-        languages = self.get_related_instance(BooksBookLanguages, instance)
-        language_objects = [language.language for language in languages]
-        res["languages"] = BookLanguageSerializer(language_objects,
-                                                  many=True).data
+        languages = [language.language for language in instance.language.all()]
+        res["languages"] = BookLanguageSerializer(languages, many=True).data
 
         # Appending subject
-        subjects = self.get_related_instance(BooksBookSubjects, instance)
-        subject_object = [subject.subject for subject in subjects]
-        res['subjects'] = BookSubjectSerializer(subject_object, many=True).data
+        subjects = [subject.subject for subject in instance.subject.all()]
+        res['subjects'] = BookSubjectSerializer(subjects, many=True).data
 
         # Appending bookshelf
-        shelfs = self.get_related_instance(BooksBookBookshelves, instance)
-        shelf_objects = [shelf.shelf for shelf in shelfs]
-        res['shelves'] = BookShelvesSerializer(shelf_objects, many=True).data
+        shelves = [shelf.shelf for shelf in instance.shelf.all()]
+        res['shelves'] = BookShelvesSerializer(shelves, many=True).data
 
-        # Appending 
+        # Appending
+        res['formats'] = BooksFormatSerializer(instance.format.all(),
+                                               many=True).data
 
         return res
