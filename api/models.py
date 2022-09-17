@@ -29,6 +29,7 @@ class BooksBook(models.Model):
     class Meta:
         managed = False
         db_table = "books_book"
+        ordering=["-download_count"]
 
 
 class BooksBookAuthors(models.Model):
@@ -38,7 +39,8 @@ class BooksBookAuthors(models.Model):
 
     @property
     def author(self):
-        return BooksAuthor.objects.get(pk=self.author_id) if self.author_id else None
+        return BooksAuthor.objects.get(
+            pk=self.author_id) if self.author_id else None
 
     class Meta:
         managed = False
@@ -49,6 +51,11 @@ class BooksBookBookshelves(models.Model):
     id = models.IntegerField(primary_key=True)
     book_id = models.IntegerField()
     bookshelf_id = models.IntegerField()
+
+    @property
+    def shelf(self):
+        return BooksBookshelf.objects.get(
+            pk=self.bookshelf_id) if self.bookshelf_id else None
 
     class Meta:
         managed = False
@@ -62,9 +69,8 @@ class BooksBookLanguages(models.Model):
 
     @property
     def language(self):
-        return (
-            BooksLanguage.objects.get(pk=self.language_id) if self.language_id else None
-        )
+        return (BooksLanguage.objects.get(
+            pk=self.language_id) if self.language_id else None)
 
     class Meta:
         managed = False
@@ -75,6 +81,11 @@ class BooksBookSubjects(models.Model):
     id = models.IntegerField(primary_key=True)
     book_id = models.IntegerField()
     subject_id = models.IntegerField()
+
+    @property
+    def subject(self):
+        return (BooksSubject.objects.get(
+            pk=self.subject_id) if self.subject_id else None)
 
     class Meta:
         managed = False
