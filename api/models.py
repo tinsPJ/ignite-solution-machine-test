@@ -34,16 +34,14 @@ class BooksBook(models.Model):
 
 class BooksBookAuthors(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.ForeignKey(BooksBook,
-                                db_column="book_id",
-                                on_delete=models.PROTECT,
-                                related_name="author")
+    book_id = models.ForeignKey(
+        BooksBook, db_column="book_id", on_delete=models.PROTECT, related_name="author"
+    )
     author_id = models.IntegerField()
 
     @property
     def author(self):
-        return BooksAuthor.objects.get(
-            pk=self.author_id) if self.author_id else None
+        return BooksAuthor.objects.get(pk=self.author_id) if self.author_id else None
 
     class Meta:
         managed = False
@@ -52,16 +50,18 @@ class BooksBookAuthors(models.Model):
 
 class BooksBookBookshelves(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.ForeignKey(BooksBook,
-                                db_column="book_id",
-                                on_delete=models.PROTECT,
-                                related_name="shelf")
+    book_id = models.ForeignKey(
+        BooksBook, db_column="book_id", on_delete=models.PROTECT, related_name="shelf"
+    )
     bookshelf_id = models.IntegerField()
 
     @property
     def shelf(self):
-        return BooksBookshelf.objects.get(
-            pk=self.bookshelf_id) if self.bookshelf_id else None
+        return (
+            BooksBookshelf.objects.get(pk=self.bookshelf_id)
+            if self.bookshelf_id
+            else None
+        )
 
     class Meta:
         managed = False
@@ -70,16 +70,19 @@ class BooksBookBookshelves(models.Model):
 
 class BooksBookLanguages(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.ForeignKey(BooksBook,
-                                db_column="book_id",
-                                on_delete=models.PROTECT,
-                                related_name="language")
+    book_id = models.ForeignKey(
+        BooksBook,
+        db_column="book_id",
+        on_delete=models.PROTECT,
+        related_name="language",
+    )
     language_id = models.IntegerField()
 
     @property
     def language(self):
-        return (BooksLanguage.objects.get(
-            pk=self.language_id) if self.language_id else None)
+        return (
+            BooksLanguage.objects.get(pk=self.language_id) if self.language_id else None
+        )
 
     class Meta:
         managed = False
@@ -88,16 +91,14 @@ class BooksBookLanguages(models.Model):
 
 class BooksBookSubjects(models.Model):
     id = models.IntegerField(primary_key=True)
-    book_id = models.ForeignKey(BooksBook,
-                                db_column="book_id",
-                                on_delete=models.PROTECT,
-                                related_name="subject")
+    book_id = models.ForeignKey(
+        BooksBook, db_column="book_id", on_delete=models.PROTECT, related_name="subject"
+    )
     subject_id = models.IntegerField()
 
     @property
     def subject(self):
-        return (BooksSubject.objects.get(
-            pk=self.subject_id) if self.subject_id else None)
+        return BooksSubject.objects.get(pk=self.subject_id) if self.subject_id else None
 
     class Meta:
         managed = False
@@ -117,10 +118,9 @@ class BooksFormat(models.Model):
     id = models.IntegerField(primary_key=True)
     mime_type = models.CharField(max_length=32)
     url = models.TextField()
-    book_id = models.ForeignKey(BooksBook,
-                                db_column="book_id",
-                                on_delete=models.PROTECT,
-                                related_name="format")
+    book_id = models.ForeignKey(
+        BooksBook, db_column="book_id", on_delete=models.PROTECT, related_name="format"
+    )
 
     class Meta:
         managed = False
