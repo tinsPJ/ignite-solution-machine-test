@@ -6,8 +6,8 @@ python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
 
-
 ```
+change db configuration in settings.ini file
 
 ## Run project
 ```shell
